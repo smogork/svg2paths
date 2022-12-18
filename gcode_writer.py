@@ -33,7 +33,7 @@ class GCodeWriter:
             lastPoint = points[0]
 
             for p in points:
-                output.write(self.__generateGCodeLine(p, lastPoint, lineNum))
+                output.write(f"{self.__generateGCodeLine(p, lastPoint, lineNum)}\n")
                 lineNum += 1
                 lastPoint = p
 
