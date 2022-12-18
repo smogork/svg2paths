@@ -29,4 +29,6 @@ Optional parameters (default values in parathesis):
 
 GNU:
 
+![obraz](https://user-images.githubusercontent.com/35574506/208318084-bc108ea1-ab4d-4b2a-b108-223ad1afb047.png)
+
 Text:
