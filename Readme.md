@@ -32,3 +32,11 @@ GNU:
 ![obraz](https://user-images.githubusercontent.com/35574506/208318084-bc108ea1-ab4d-4b2a-b108-223ad1afb047.png)
 
 Text:
+
+![image](https://user-images.githubusercontent.com/79797876/208318598-51f53e34-1e21-4df2-bb30-9a4c98f8c1b4.png)
+
+## Known limitations
+
+Now svg2paths will parse EVERY path object (even some rects from headers) and would try to convert it.
+Also transforms from layers will not be considered.
+Clean your SVG files before use.
