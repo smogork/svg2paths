@@ -1,6 +1,6 @@
 from svgpathtools import svg2paths
 import numpy as np
-import VectorsPY as vpy
+import vectors as vpy
 
 
 def read_file(path: str):
@@ -27,14 +27,14 @@ def parse(path: str, bezier_segments: int) -> [[np.imag]]:
 
 
 def convert_to_paths(filepath: str, bezier_segments: int, origin: vpy.Vector2,
-                     scale: vpy.Vector2, rotation: float) -> [[vpy.Vector2]]:
+                     scale: vpy.Vector2, rotation: float, depth: float, safe_height: float) -> [vpy.Vector3]:
     letters = parse(filepath, bezier_segments)
     paths = []
 
     for letter in letters:
         letter_path = []
         for point in letter:
-            coord = vpy.Vector2(np.real(point), np.imag(point))
+            coord = vpy.Vector3(np.real(point), np.imag(point), depth)
             # apply scale
             coord.x *= scale.x
             coord.y *= scale.y
@@ -45,7 +45,14 @@ def convert_to_paths(filepath: str, bezier_segments: int, origin: vpy.Vector2,
             coord.x += origin.x
             coord.y += origin.y
             letter_path.append(coord)
-        paths.append(letter_path)
+
+        if len(paths) > 0:
+            prev = paths[-1]
+            next = letter_path[0]
+            paths.append(vpy.Vector3(prev.x, prev.y, safe_height))
+            paths.append(vpy.Vector3(next.x, next.y, safe_height))
+
+        paths.extend(letter_path)
 
     return paths
 
