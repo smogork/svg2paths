@@ -13,6 +13,10 @@ class GCodeWriter:
     def __generateGCodeLine(self, curPoint: Vector3, lastPoint: Vector3, lineNumber: int) -> str:
         res = f"N{lineNumber}G01"
 
+        # Skipping null moves
+        if curPoint == lastPoint:
+            return ""
+
         if curPoint.x != lastPoint.x:
             res += f"X{curPoint.x:.3f}"
         if curPoint.y != lastPoint.y:
@@ -28,12 +32,15 @@ class GCodeWriter:
 
         with open(filepath, "w") as output:
             lineNum = 0
-            output.write(f"{self.__generateGCodeLine(points[0], Vector3(points[0].x + 1, points[0].y + 1, points[0].z + 1), lineNum)}\n")
+            output.write(f"{self.__generateGCodeLine(points[0], Vector3(points[0].x + 1, points[0].y + 1, points[0].z + 1),lineNum)}\n")
             lineNum += 1
             lastPoint = points[0]
 
             for p in points:
-                output.write(f"{self.__generateGCodeLine(p, lastPoint, lineNum)}\n")
+                line = self.__generateGCodeLine(p, lastPoint, lineNum)
+                if len(line) == 0:
+                    continue
+                output.write(f"{line}\n")
                 lineNum += 1
                 lastPoint = p
 
