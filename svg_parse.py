@@ -34,7 +34,7 @@ def convert_to_paths(filepath: str, bezier_segments: int, origin: vpy.Vector2,
     for letter in letters:
         letter_path = []
         for point in letter:
-            coord = vpy.Vector3(np.real(point), np.imag(point), depth)
+            coord = vpy.Vector3(np.real(point), -np.imag(point), depth)
             # apply scale
             coord.x *= scale.x
             coord.y *= scale.y

@@ -1,28 +1,36 @@
 import numpy as np
 import argparse
 
-from vectors import Vector3
+from vectors import Vector2
+from svg_parse import convert_to_paths
 from gcode_writer import GCodeWriter
 
-def main(startZ: float, targetZ: float, filename: str, diameter: int):
-    t = np.array([Vector3(10, 3, 5), Vector3(10, 3, 2), Vector3(10, 2, 3), Vector3(10, 2, 3), Vector3(1, 6, 3)])
+def main(startZ: float, targetZ: float, filename: str, diameter: int, svg_file: str,
+         scale: Vector2, origin: Vector2, rotation: float):
+    paths = convert_to_paths(svg_file, 20, origin, scale, rotation, targetZ, startZ)
 
     writer = GCodeWriter()
     writer.SetCutterDiameter(diameter)
-    writer.SaveCutterPath(filename, t)
+    writer.SaveCutterPath(filename, paths)
 
-    print(t)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         prog='svg2paths',
         description='Converts paths from SVG file to lines at GCode')
 
+    parser.add_argument('svg_file', help="Path to svg file", type=str)  # positional argument
     parser.add_argument('filename', help="Filename to save", type=str)  # positional argument
     parser.add_argument('-z', "--plane-z", required=True, help="paths will be created on given Z", type=float)  # option that takes a value
     parser.add_argument('-s', "--start-z", required=True, help="secure height to start from", type=float)  # option that takes a value
     parser.add_argument("-d", "--diameter", default=1, help="Cutter diameter in milimiters", type=int)
+    parser.add_argument("-ox", "--origin-x", default=0, help="Point that will correspond to SVG 0,0", type=float)
+    parser.add_argument("-oy", "--origin-y", default=0, help="Point that will correspond to SVG 0,0", type=float)
+    parser.add_argument("-sx", "--scale-x", default=1, help="X scale of image", type=float)
+    parser.add_argument("-sy", "--scale-y", default=1, help="Y scale of image", type=float)
+    parser.add_argument("-r", "--rotation", default=0, help="Rotation of image", type=float)
 
     args = parser.parse_args()
-    main(args.start_z, args.plane_z, args.filename, args.diameter)
+    main(args.start_z, args.plane_z, args.filename, args.diameter, args.svg_file,
+         Vector2(args.scale_x, args.scale_y), Vector2(args.origin_x, args.origin_y), args.rotation)
 
