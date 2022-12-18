@@ -1,16 +1,17 @@
-# This is a sample Python script.
+import numpy as np
 
-# Press Ctrl+F5 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from vectors import Vector3
+from gcode_writer import GCodeWriter
 
+def main():
+    t = np.array([Vector3(10, 3, 5), Vector3(10, 3, 2), Vector3(10, 2, 3), Vector3(1, 6, 3)])
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press F9 to toggle the breakpoint.
+    writer = GCodeWriter()
+    writer.SetCutterDiameter(3)
+    writer.SaveCutterPath("test", t)
 
+    print(t)
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    main()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
