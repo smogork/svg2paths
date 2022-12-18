@@ -1,7 +1,17 @@
-from svg_parse import convert_to_paths
-from VectorsPY import Vector2
+import numpy as np
 
+from vectors import Vector3
+from gcode_writer import GCodeWriter
+
+def main():
+    t = np.array([Vector3(10, 3, 5), Vector3(10, 3, 2), Vector3(10, 2, 3), Vector3(1, 6, 3)])
+
+    writer = GCodeWriter()
+    writer.SetCutterDiameter(3)
+    writer.SaveCutterPath("test", t)
+
+    print(t)
 
 if __name__ == '__main__':
-    paths = convert_to_paths('test.svg', 10, Vector2(-15, -15), Vector2(0.1, 0.1), 0)
-    print(paths)
+    main()
+
