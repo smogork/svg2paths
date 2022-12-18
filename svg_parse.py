@@ -14,7 +14,11 @@ def parse(path: str, bezier_segments: int) -> [[np.imag]]:
 
     for path in paths:
         points = []
+        prev_segment = None
         for segment in path:
+            if prev_segment is not None and abs(prev_segment.point(1) - segment.point(0)) > 1e-6:
+                letters.append(points)
+                points = []
             poly = segment.poly()
             if poly.order == 1:  # line
                 points.append(poly(0))
@@ -22,6 +26,7 @@ def parse(path: str, bezier_segments: int) -> [[np.imag]]:
             else:  # bezier segment
                 for i in np.linspace(0, 1, bezier_segments):
                     points.append(poly(i))
+            prev_segment = segment
         letters.append(points)
     return letters
 
