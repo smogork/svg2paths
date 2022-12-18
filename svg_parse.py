@@ -39,8 +39,9 @@ def convert_to_paths(filepath: str, bezier_segments: int, origin: vpy.Vector2,
             coord.x *= scale.x
             coord.y *= scale.y
             # apply rotation
-            coord.x = np.cos(rotation) * coord.x + np.sin(rotation) * coord.y
-            coord.y = -np.sin(rotation) * coord.x + np.cos(rotation) * coord.y
+            xx =  np.cos(rotation) * coord.x - np.sin(rotation) * coord.y# CHWDP - chuj w dupe pythonowi
+            coord.y = np.sin(rotation) * coord.x + np.cos(rotation) * coord.y
+            coord.x = xx
             # apply translation
             coord.x += origin.x
             coord.y += origin.y
