@@ -20,9 +20,9 @@ class GCodeWriter:
         if curPoint.x != lastPoint.x:
             res += f"X{curPoint.x:.3f}"
         if curPoint.y != lastPoint.y:
-            res += f"X{curPoint.y:.3f}"
+            res += f"Y{curPoint.y:.3f}"
         if curPoint.z != lastPoint.z:
-            res += f"X{curPoint.z:.3f}"
+            res += f"Z{curPoint.z:.3f}"
 
         return res
 
