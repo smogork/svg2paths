@@ -10,7 +10,7 @@ def main(startZ: float, targetZ: float, jumpZ: float, filename: str, diameter: i
          scale: Vector2, origin: Vector2, rotation: float):
 
 
-    paths = convert_to_paths(svg_file, 2, origin, scale, rotation / 180 * math.pi, targetZ, targetZ + jumpZ)
+    paths = convert_to_paths(svg_file, 0.5, origin, scale, rotation / 180 * math.pi, targetZ, targetZ + jumpZ)
 
     paths.insert(0, Vector3(paths[0].x, paths[0].y, startZ))
     paths.insert(0, Vector3(0, 0, startZ))

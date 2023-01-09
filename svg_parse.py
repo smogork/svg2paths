@@ -1,4 +1,4 @@
-from svgpathtools import svg2paths
+from svgpathtools import svg2paths, Arc
 import numpy as np
 import vectors as vpy
 
@@ -19,16 +19,22 @@ def parse(path: str, bezier_precision: float) -> [[np.imag]]:
             if prev_segment is not None and abs(prev_segment.point(1) - segment.point(0)) > 1e-6:
                 letters.append(points)
                 points = []
-            poly = segment.poly()
-
-            if poly.order == 1:  # line
-                points.append(poly(0))
-                points.append(poly(1))
-            else:  # bezier segment
+            if isinstance(segment, Arc):
                 minX, maxX, minY, maxY = segment.bbox()
                 bezier_segments = int(max(2, ((maxX - minX) + (maxY - minY)) / bezier_precision))
                 for i in np.linspace(0, 1, bezier_segments):
-                    points.append(poly(i))
+                    points.append(segment.point(i))
+            else:
+                poly = segment.poly()
+                if poly.order == 1:  # line
+                    points.append(poly(0))
+                    points.append(poly(1))
+                else:  # bezier segment
+                    minX, maxX, minY, maxY = segment.bbox()
+                    bezier_segments = int(max(2, ((maxX - minX) + (maxY - minY)) / bezier_precision))
+                    for i in np.linspace(0, 1, bezier_segments):
+                        points.append(poly(i))
+
             prev_segment = segment
         letters.append(points)
     return letters
