@@ -8,7 +8,7 @@ def read_file(path: str):
     return paths
 
 
-def parse(path: str, bezier_segments: int) -> [[np.imag]]:
+def parse(path: str, bezier_precision: float) -> [[np.imag]]:
     paths = read_file(path)
     letters = []
 
@@ -20,10 +20,13 @@ def parse(path: str, bezier_segments: int) -> [[np.imag]]:
                 letters.append(points)
                 points = []
             poly = segment.poly()
+
             if poly.order == 1:  # line
                 points.append(poly(0))
                 points.append(poly(1))
             else:  # bezier segment
+                minX, maxX, minY, maxY = segment.bbox()
+                bezier_segments = int(max(2, ((maxX - minX) + (maxY - minY)) / bezier_precision))
                 for i in np.linspace(0, 1, bezier_segments):
                     points.append(poly(i))
             prev_segment = segment
@@ -31,9 +34,9 @@ def parse(path: str, bezier_segments: int) -> [[np.imag]]:
     return letters
 
 
-def convert_to_paths(filepath: str, bezier_segments: int, origin: vpy.Vector2,
+def convert_to_paths(filepath: str, bezier_precision: float, origin: vpy.Vector2,
                      scale: vpy.Vector2, rotation: float, depth: float, safe_height: float) -> [vpy.Vector3]:
-    letters = parse(filepath, bezier_segments)
+    letters = parse(filepath, bezier_precision)
     paths = []
 
     for letter in letters:
