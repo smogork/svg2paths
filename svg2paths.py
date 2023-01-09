@@ -1,6 +1,5 @@
 import math
 
-import numpy as np
 import argparse
 
 from vectors import Vector2, Vector3
@@ -14,7 +13,9 @@ def main(startZ: float, targetZ: float, jumpZ: float, filename: str, diameter: i
     paths = convert_to_paths(svg_file, 20, origin, scale, rotation / 180 * math.pi, targetZ, targetZ + jumpZ)
 
     paths.insert(0, Vector3(paths[0].x, paths[0].y, startZ))
+    paths.insert(0, Vector3(0, 0, startZ))
     paths.append(Vector3(paths[-1].x, paths[-1].y, startZ))
+    paths.append(Vector3(0, 0, startZ))
 
     writer = GCodeWriter()
     writer.SetCutterDiameter(diameter)
