@@ -10,18 +10,25 @@ class GCodeWriter:
         ext = f".k{res[0]}{res[1]}"
         return filename + ext
 
+    def __scalarAlmostEquals(self, a: float, b:float, eps: float):
+        return abs(a - b) < eps
+
+    def __vector3AlmostEquals(self, v: Vector3, w: Vector3, eps: float):
+        return self.__scalarAlmostEquals(v.x, w.x, eps) and self.__scalarAlmostEquals(v.y, w.y, eps) and self.__scalarAlmostEquals(v.z, w.z, eps)
+
     def __generateGCodeLine(self, curPoint: Vector3, lastPoint: Vector3, lineNumber: int) -> str:
         res = f"N{lineNumber}G01"
+        eps = 1e-3
 
         # Skipping null moves
-        if curPoint == lastPoint:
+        if self.__vector3AlmostEquals(curPoint, lastPoint, eps):
             return ""
 
-        if curPoint.x != lastPoint.x:
+        if not self.__scalarAlmostEquals(curPoint.x, lastPoint.x, eps):
             res += f"X{curPoint.x:.3f}"
-        if curPoint.y != lastPoint.y:
+        if not self.__scalarAlmostEquals(curPoint.y, lastPoint.y, eps):
             res += f"Y{curPoint.y:.3f}"
-        if curPoint.z != lastPoint.z:
+        if not self.__scalarAlmostEquals(curPoint.z, lastPoint.z, eps):
             res += f"Z{curPoint.z:.3f}"
 
         return res
